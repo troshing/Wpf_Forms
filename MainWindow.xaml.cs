@@ -28,7 +28,15 @@ namespace Wpf_Forms
     /// </summary>
     public partial class MainWindow : Window
     {
+        [Serializable]
+        unsafe struct ByteBufer
+        {
+            public fixed byte testByte[6];
+            public fixed byte FidName[20];
+        }
+
         WindowForm secondForm;
+        UpdaterWindow updaterWindow;
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
         public Func<double, string> YFormatter { get; set; }
@@ -42,6 +50,7 @@ namespace Wpf_Forms
         public SerialPortStream serial = new SerialPortStream();
 
         public Sensors mysens;
+        private ByteBufer bufer;
 
         [Serializable]
         unsafe struct Point
@@ -52,17 +61,9 @@ namespace Wpf_Forms
             public int Y;
         }
 
-        [Serializable]
-        unsafe struct ByteBufer
-        {
-            public fixed byte testByte[6];
-        }
-
         public MainWindow()
         {
-            InitializeComponent();
-            
-            secondForm = new WindowForm();
+            InitializeComponent();                        
             GenerateSinus();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             
@@ -93,12 +94,20 @@ namespace Wpf_Forms
         private void btn_NewForm_Click(object sender, RoutedEventArgs e)
         {
             //modifying any series values will also animate and update the chart
+            // secondForm = new WindowForm();
+            // secondForm.Show();
 
-            SeriesCollection.Add(new LineSeries
-            {
-                Values = new ChartValues<double>(signal_input.ToArray()),
-                LineSmoothness = 1 //straight lines, 1 really smooth lines
-            });                      
+            updaterWindow = new UpdaterWindow();
+            // updaterWindow.Owner = this;
+            updaterWindow.Show();
+                updaterWindow.RunWorker();
+                SeriesCollection.Add(new LineSeries
+                {
+                    Values = new ChartValues<double>(signal_input.ToArray()),
+                    LineSmoothness = 1 //straight lines, 1 really smooth lines
+                });
+ 
+             updaterWindow.StopWorker();
         }
 
         private void GenerateSinus()
@@ -227,7 +236,7 @@ namespace Wpf_Forms
 
         private void mainWindow_Closed(object sender, EventArgs e)
         {            
-            this.Close();
+            Close();
             Application.Current.Shutdown();
         }
 
@@ -246,11 +255,16 @@ namespace Wpf_Forms
         }
 
         private void BtnTest_Click(object sender, RoutedEventArgs e)
-        {                                   
+        {
+            updaterWindow = new UpdaterWindow();
+            updaterWindow.Owner = this;
+            updaterWindow.Show();
+            if((updaterWindow.IsLoaded) && (updaterWindow.IsInitialized))
+            updaterWindow.RunWorker();
             unsafe
             {
                 Point point = new Point();
-                ByteBufer bufer = new ByteBufer();
+                bufer = new ByteBufer();
 
                 bufer.testByte[0] = 0xA5;
                 bufer.testByte[1] = 0xA6;
@@ -259,12 +273,7 @@ namespace Wpf_Forms
                 bufer.testByte[3] = 0x10;
                 bufer.testByte[4] = 0x20;
                 bufer.testByte[5] = 0x30;
-
-                void* pbyte = null;
-                void* pStruct = null;
-
-                pbyte = bufer.testByte;
-                pStruct = &point;
+                SetFidName("Присоединение №1");
 
                 point.X = 5;
                 point.Y = 10;
@@ -283,17 +292,6 @@ namespace Wpf_Forms
                     // throw;
                 }
 
-               // int size =  Buffer.ByteLength(bufer.testByte);
-                try
-                {
-                  Buffer.MemoryCopy(pbyte, pStruct, sizeof(Point), 6);
-                }
-                catch (Exception exc)
-                {
-                    MessageBox.Show(exc.ToString());
-                    // throw;
-                }
-
        
             // streamBuffer.Write(testByte, 0, testByte.Length);
 
@@ -302,8 +300,60 @@ namespace Wpf_Forms
             
             streamBuffer.Close();
             streamStruct.Close();
-            // MessageBox.Show(point.X.ToString() + " " + point.Y.ToString());
+            
+                // MessageBox.Show(point.X.ToString() + " " + point.Y.ToString());
             }
+
+            updaterWindow.StopWorker();
+            updaterWindow.Close();
+        }
+
+        private void SetFidName(string fidName)
+        {
+            bufer = new ByteBufer();
+            string getfid = "";
+
+            byte[] copyBuf = new byte[fidName.Length];
+            //string name = Encoding.UTF8.GetString(fidName, 0);
+            char[] textcopy;
+            //fidName.CopyTo(0, textcopy, 0, fidName.Length);
+
+            //Encoding encoding = new Encoding(866);
+            copyBuf = ToByteArray(fidName, Encoding.GetEncoding(1251));    // Encoding.ASCII.GetBytes(fidName);
+            // copyBuf = GetBytes(fidName);
+            unsafe
+            {
+                for(int i=0;i<fidName.Length;i++)
+                {
+                    // bufer.FidName[i] = copyBuf[i]; // Convert.ToByte(textcopy[i]);
+                }
+            }
+
+            getfid = ToStringArray(copyBuf, Encoding.GetEncoding(1251));    // GetString(copyBuf); // Encoding.ASCII.GetString(copyBuf);
+        }
+
+        public byte[] mGetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        public string mGetString(byte[] bytes)
+        {
+            char[] chars = new char[bytes.Length / sizeof(char)];
+            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
+        }
+
+        public byte[] ToByteArray(string str, Encoding encoding)
+        {
+            return encoding.GetBytes(str);
+        }
+
+        public string ToStringArray(byte[] bytes, Encoding encoding)
+        {
+            return encoding.GetString(bytes);
         }
     }
 }

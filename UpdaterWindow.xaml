@@ -1,0 +1,17 @@
+﻿<Window x:Name="updaterWindow" x:Class="Wpf_Forms.UpdaterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpf_Forms"
+        mc:Ignorable="d"
+        Title="UpdaterWindow" Height="172.961" Width="441.656" Visibility="Visible" ResizeMode="NoResize">
+    <Grid>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Stretch" 
+                     Height="20" Margin="10,0" 
+                     VerticalAlignment="Bottom" IsIndeterminate="True"/>
+        
+        <Button x:Name="btnOpen" Content="Button" HorizontalAlignment="Left" Margin="293,36,0,0" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</Window>
