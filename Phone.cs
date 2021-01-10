@@ -13,10 +13,22 @@ namespace Wpf_Forms
         public int Price { get; set; }
         public List<string> Status { get; set; }
         public string StateType { get; set; }
+        public static ushort idPhone { get; set; }
 
         public Phone()
         {
             Status = new List<string>();
+            // idPhone++;
+        }
+
+        public static void AddId()
+        {
+            idPhone++;
+        }
+
+        public static void DeleteId()
+        {
+            idPhone--;
         }
     }
 }

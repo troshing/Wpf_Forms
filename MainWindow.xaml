@@ -7,25 +7,26 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:Wpf_Forms"
         mc:Ignorable="d"
-        Title="Main Window" Height="550.5" Width="1101.5" 
+        Title="Main Window" Height="554" Width="1276" 
         WindowStartupLocation="CenterScreen" 
         ResizeMode="NoResize" Closed="mainWindow_Closed" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="11.734"></ColumnDefinition>
-            <ColumnDefinition Width="588.266"></ColumnDefinition>
+            <ColumnDefinition Width="492.75"></ColumnDefinition>
+            <ColumnDefinition Width="96.25"/>
             <ColumnDefinition Width="400"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Button x:Name="btn_NewForm" 
-                Grid.Column="2"
+                Grid.Column="3"
                 Content="Click Form" 
                 Margin="27,34,258,0" 
                 VerticalAlignment="Top" Height="39" 
                 Click="btn_NewForm_Click"/>
         <lvc:CartesianChart
             Grid.Column="0"
-            Series="{Binding SeriesCollection}" Grid.ColumnSpan="2" >
+            Series="{Binding SeriesCollection}" Grid.ColumnSpan="3" >
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
@@ -35,7 +36,7 @@
         </lvc:CartesianChart>
         <Button x:Name="btnClear"
             Content="Clear" 
-            Grid.Column="2" 
+            Grid.Column="3" 
             HorizontalAlignment="Left" 
             Margin="27,108,0,0" 
             VerticalAlignment="Top"  Height="39" Width="115" 
@@ -45,30 +46,31 @@
             x:Name="SensorsDataGrid" 
             AutoGenerateColumns ="False" 
             HorizontalAlignment="Right" 
-            Grid.Column="2" Margin="0, 100,-81,10" >
+            Grid.Column="3" Margin="0,90,-245,20" RenderTransformOrigin="0.49,0.495" Width="478" >
 
             <DataGrid.Items>
 
             </DataGrid.Items>
             <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=idPhone}" Width="40"  IsReadOnly="True"/>
                 <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="90" IsReadOnly="False" />
                 <DataGridHyperlinkColumn Header="Компания" Binding="{Binding Path=Company,StringFormat={}{0:C}}" Width="80" IsReadOnly="False" />
-                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50"  IsReadOnly="False"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="90"  IsReadOnly="False"/>
                 <DataGridTextColumn Header="Типы" Binding="{Binding Path= StateType}" Width="100" IsReadOnly="False"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="Btn_AddSensors" Content="Добавить Датчик" Grid.Column="2" HorizontalAlignment="Left" Margin="27,174,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_AddSensors_Click"/>
-        <Button x:Name="Btn_DeleteSensors" Content="Убрать Датчик" Grid.Column="2" HorizontalAlignment="Left" Margin="28,234,0,0" VerticalAlignment="Top" Width="115" Height="39" Click="Btn_DeleteSensors_Click"/>
-        <Button x:Name="Btn_ToExcel" Content="ToExcel" Grid.Column="2" HorizontalAlignment="Left" Margin="27,300,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_ToExcel_Click"/>
-        <Button x:Name="Btn_FromExcel" Content="FromExcel" Grid.Column="2" HorizontalAlignment="Left" Margin="28,358,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_FromExcel_Click"/>
-        <TextBox x:Name="TxtBoxPrice" Grid.Column="2" HorizontalAlignment="Left" 
+        <Button x:Name="Btn_AddSensors" Content="Добавить Датчик" Grid.Column="3" HorizontalAlignment="Left" Margin="27,174,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_AddSensors_Click"/>
+        <Button x:Name="Btn_DeleteSensors" Content="Убрать Датчик" Grid.Column="3" HorizontalAlignment="Left" Margin="28,234,0,0" VerticalAlignment="Top" Width="115" Height="39" Click="Btn_DeleteSensors_Click"/>
+        <Button x:Name="Btn_ToExcel" Content="ToExcel" Grid.Column="3" HorizontalAlignment="Left" Margin="27,300,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_ToExcel_Click"/>
+        <Button x:Name="Btn_FromExcel" Content="FromExcel" Grid.Column="3" HorizontalAlignment="Left" Margin="28,358,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_FromExcel_Click"/>
+        <TextBox x:Name="TxtBoxPrice" Grid.Column="3" HorizontalAlignment="Left" 
                  Height="28" Margin="328,34,-47,0" TextWrapping="Wrap" Text="1357" 
                  VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold"
                  />
-        <ComboBox x:Name="CmbBoxType" Grid.Column="2" HorizontalAlignment="Left" 
+        <ComboBox x:Name="CmbBoxType" Grid.Column="3" HorizontalAlignment="Left" 
                   Margin="184,34,0,0" VerticalAlignment="Top" Width="120" Height="28"
                   />
-        <Button x:Name="BtnTest" Content="Test Struct" Grid.Column="2" HorizontalAlignment="Left" 
+        <Button x:Name="BtnTest" Content="Test Struct" Grid.Column="3" HorizontalAlignment="Left" 
                 Margin="28,428,0,0" VerticalAlignment="Top" Width="114" Height="40" Click="BtnTest_Click"/>
     </Grid>
 </Window>

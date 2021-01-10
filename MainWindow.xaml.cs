@@ -44,10 +44,10 @@ namespace Wpf_Forms
         List<double> signal_input = new List<double>();
         ObservableCollection<Phone> phoneCollect { get; set; }
 
-        public Phone phone;
+        //public Phone phone;
         List<Phone> myPhonesList = new List<Phone>();
         // public ExcelPackage package;
-        public SerialPortStream serial = new SerialPortStream();
+        // public SerialPortStream serial = new SerialPortStream();
 
         public Sensors mysens;
         private ByteBufer bufer;
@@ -77,12 +77,13 @@ namespace Wpf_Forms
                 },
             };
 
-            phoneCollect = new ObservableCollection<Phone>();                       
-            serial.PortName = "COM1";
-            serial.BaudRate = 115200;
-            serial.Parity = Parity.None;
-            serial.DataBits = 8;
-            serial.Open();
+            phoneCollect = new ObservableCollection<Phone>();
+            // serial.PortName = "COM1";
+            // serial.BaudRate = 115200;
+            // serial.Parity = Parity.None;
+            // serial.DataBits = 8;
+            // serial.Open();
+            Phone.idPhone = 0;
             mysens = new Sensors();
             myPhonesList.Capacity = 512;
             PhoneListAdding();
@@ -144,14 +145,15 @@ namespace Wpf_Forms
         private void PhoneListAdding()
         {
             string[] myList;
-            phone = new Phone();
-            phone.Status.Add("Activity");
-            phone.Status.Add("Bliding");
-            phone.Status.Add("Striking");
-            phone.Status.Add("Running");
-            phone.Status.Add("Hiking");
+            // Phone phone = new Phone();
+            List<string> phone = new List<string>();
+            phone.Add("Activity");
+            phone.Add("Bliding");
+            phone.Add("Striking");
+            phone.Add("Running");
+            phone.Add("Hiking");
 
-            myList = phone.Status.ToArray();
+            myList = phone.ToArray();
             
             foreach (string port in myList)
             {
@@ -164,7 +166,7 @@ namespace Wpf_Forms
         private void Btn_AddSensors_Click(object sender, RoutedEventArgs e)
         {
             SensorsDataGrid.ItemsSource = phoneCollect;
-            phone = new Phone();
+            Phone phone = new Phone();
             if (TxtBoxPrice.Text != "")
             {
                 phone.Price = Convert.ToInt32(TxtBoxPrice.Text);
@@ -174,6 +176,7 @@ namespace Wpf_Forms
                 phone.Price = 1;
             }
 
+            Phone.AddId();
             phone.StateType = CmbBoxType.SelectedItem.ToString();
             phone.Company = "Apple";
             phone.Title = "Phones";
@@ -185,14 +188,20 @@ namespace Wpf_Forms
         {
             if(myPhonesList.Count != 0)
             {
-                phone = new Phone();
-                phone = myPhonesList[myPhonesList.Count - 1];
+                Phone phone = new Phone();
+                phone = myPhonesList[myPhonesList.Count-1];
                 phoneCollect.Remove(phone);
+                Phone.DeleteId();
                 // SensorsDataGrid.Items.RemoveAt(myPhonesList.IndexOf(phone, myPhonesList.Count - 1));       // Удалить из Спсика
                 myPhonesList.RemoveAt(myPhonesList.IndexOf(phone,myPhonesList.Count-1));                  // Удалить из Колллекции
             }
+            else if(myPhonesList.Count<=1)
+            {
+                Phone.idPhone = 0;
+            }
             else
             {
+                Phone.idPhone = 0;
                 MessageBox.Show("Нечего Удалять!");
             }
 
@@ -229,8 +238,8 @@ namespace Wpf_Forms
             mysens.SetDefaultParams();
                        
             buffer = mysens.GetSerialize();
-            serial.Flush();
-            serial.WriteAsync(buffer,0,buffer.Length);
+            // serial.Flush();
+            // serial.WriteAsync(buffer,0,buffer.Length);
             // serial.Close();
         }
 
@@ -246,11 +255,11 @@ namespace Wpf_Forms
             int countBytes = 0;
             
             buffer = new byte[mysens.GetSizeSens()];
-            serial.Flush();
-            serial.ReadTimeout = 2000;
+            // serial.Flush();
+            // serial.ReadTimeout = 2000;
             Thread.Sleep(1000);
 
-            countBytes = await serial.ReadAsync(buffer, 0, mysens.GetSizeSens());
+            countBytes = 40; // await serial.ReadAsync(buffer, 0, mysens.GetSizeSens());
             mysens.SetSerialize(buffer, countBytes);
         }
 
