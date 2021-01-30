@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<library>
+<books>
+<book checkedout="no">
+<title>To Kill a Mockingbird</title>
+432799_1_EnHarper Lee</author>
+</book>
+<book checkedout="no">
+<title>Price and Prejudice</title>
+432799_1_EnJane Austen</author>
+</book>
+<book checkedout="yes">
+<title>The Great Gatsby</title>
+432799_1_EnF. Scott Fitzgerald</author>
+</book>
+<book checkedout="no">
+<title>1984</title>
+432799_1_EnGeorge Orwell</author>
+</book>
+</books>
+<movies>
+<movie checkedout="no">
+<title>King Kong</title>
+<year>1933</year>
+</movie>
+<movie checkedout="yes">
+<title>King Kong</title>
+<year>2005</year>
+</movie>
+<movie checkedout="yes">
+<title>To Kill A Mockingbird</title>
+<year>1962</year>
+</movie>
+<movie checkedout="no">
+<title>The Green Mile</title>
+<year>1999</year>
+</movie>
+</movies>
+</library>

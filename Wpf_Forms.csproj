@@ -77,8 +77,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Calibration.cs" />
+    <Compile Include="Person.cs" />
     <Compile Include="Phone.cs" />
     <Compile Include="Sensors.cs" />
+    <Compile Include="SerialezerXML.cs" />
     <Compile Include="UpdaterWindow.xaml.cs">
       <DependentUpon>UpdaterWindow.xaml</DependentUpon>
     </Compile>

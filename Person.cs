@@ -7,30 +7,25 @@ using System.Threading.Tasks;
 namespace Wpf_Forms
 {
     [Serializable]
-    public class Phone
+    public class Person
     {
         public string Title { get; set; }
         public string Company { get; set; }
-        public int Price { get; set; }
-        public List<string> Status { get; set; }
-        public string StateType { get; set; }
-        public static ushort idPhone { get; set; }
-        public ushort idNumber { get; set; }
+        public static ushort idPerson { get; set; }
 
-        public Phone()
+        public Person()
         {
-            Status = new List<string>();
-            // idPhone++;
+            //
         }
 
         public static void AddId()
         {
-            idPhone++;
+            idPerson++;
         }
 
         public static void DeleteId()
         {
-            idPhone--;
+            idPerson--;
         }
     }
 }

@@ -20,6 +20,10 @@ using OfficeOpenXml;
 using RJCP.IO.Ports;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.Win32;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Collections.Specialized;
 
 namespace Wpf_Forms
 {
@@ -42,10 +46,12 @@ namespace Wpf_Forms
         public Func<double, string> YFormatter { get; set; }
         private float[] sinusBufer;
         List<double> signal_input = new List<double>();
-        ObservableCollection<Phone> phoneCollect { get; set; }
+        public ObservableCollection<Phone> phoneCollect { get; set; }
 
         //public Phone phone;
         List<Phone> myPhonesList = new List<Phone>();
+        List<Person> mPersons = new List<Person>();
+       
         // public ExcelPackage package;
         // public SerialPortStream serial = new SerialPortStream();
 
@@ -101,7 +107,7 @@ namespace Wpf_Forms
             updaterWindow = new UpdaterWindow();
             // updaterWindow.Owner = this;
             updaterWindow.Show();
-                updaterWindow.RunWorker();
+            updaterWindow.RunWorker();
                 SeriesCollection.Add(new LineSeries
                 {
                     Values = new ChartValues<double>(signal_input.ToArray()),
@@ -182,6 +188,7 @@ namespace Wpf_Forms
             phone.Title = "Phones";
             myPhonesList.Add(phone);
             phoneCollect.Add(phone);
+            phoneCollect[Phone.idPhone - 1].idNumber = Phone.idPhone;
         }
 
         private void Btn_DeleteSensors_Click(object sender, RoutedEventArgs e)
@@ -363,6 +370,106 @@ namespace Wpf_Forms
         public string ToStringArray(byte[] bytes, Encoding encoding)
         {
             return encoding.GetString(bytes);
+        }
+
+        private void btn_SaveToXML_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = "";
+            SerialezerXML serialezerXML = new SerialezerXML();
+            DeletePersons();
+            InitPersons();
+            Phone phone = new Phone();
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "XML Files *.xml|*.xml";
+            if(dlg.ShowDialog() == true)
+            {
+                fileName = dlg.FileName;
+            }
+
+            serialezerXML.persons = mPersons;
+            serialezerXML.phones = myPhonesList;
+            XmlSerializer serializer = new XmlSerializer(typeof(SerialezerXML), "Serialization");
+            
+            using (MemoryStream stream = new MemoryStream())
+            {
+                serializer.Serialize(stream, serialezerXML);
+                
+                using (FileStream fs = new FileStream(fileName, FileMode.Create))
+                {
+                    stream.WriteTo(fs);
+                    fs.Flush();
+                }
+            }
+        }
+
+        private void btn_LoadXML_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = "";
+            // SensorsDataGrid.ItemsSource = phoneCollect;
+            // SensorsDataGrid.Items.CurrentChanging += CellChanging;
+             SerialezerXML serialezerXML = new SerialezerXML();
+            
+            OpenFileDialog dlg = new OpenFileDialog();
+            mPersons.Clear();
+            myPhonesList.Clear();
+            phoneCollect.Clear();
+
+            dlg.Filter = "XML Files *.xml|*.xml";
+            if (dlg.ShowDialog() == true)
+            {
+                fileName = dlg.FileName;
+            }
+            XmlSerializer serializer = new XmlSerializer(typeof(SerialezerXML), "Serialization");
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            {
+                serialezerXML = (SerialezerXML)serializer.Deserialize(fs);
+                fs.Close();
+            }
+
+            mPersons = serialezerXML.persons;
+            myPhonesList = serialezerXML.phones;
+            Phone.idPhone = 0;
+            
+            for(int i=0;i < myPhonesList.Count;i++)
+            {
+                Phone phone = new Phone();
+                phone = myPhonesList[i];
+                AddPhoneCollect(phone);
+                Phone.AddId();
+                phoneCollect[Phone.idPhone - 1].idNumber = Phone.idPhone;
+            }
+        }
+        private void AddPhoneCollect(Phone myphone)
+        {
+            SensorsDataGrid.ItemsSource = phoneCollect;
+            phoneCollect.Add(myphone);
+        }
+        private void InitPersons()
+        {
+            int cntPersons = 5;
+            
+            for(int i=0;i<cntPersons;i++)
+            {
+                Person person = new Person();
+                person.Company = "RandomCompany " + i.ToString();
+                person.Title = "Person: " + i.ToString();
+                Person.AddId();
+                mPersons.Add(person);
+            }
+        }
+
+        private void DeletePersons()
+        {
+            int cntPersons = mPersons.Count;
+
+            if (cntPersons != 0)
+            {
+                mPersons.Clear();
+                for(int i=0;i<cntPersons;i++)
+                {
+                    Person.DeleteId();
+                }
+            }
         }
     }
 }
