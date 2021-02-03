@@ -63,7 +63,7 @@
         <Button x:Name="Btn_DeleteSensors" Content="Убрать Датчик" Grid.Column="3" HorizontalAlignment="Left" Margin="28,234,0,0" VerticalAlignment="Top" Width="115" Height="39" Click="Btn_DeleteSensors_Click"/>
         <Button x:Name="Btn_ToExcel" Content="ToExcel" Grid.Column="3" HorizontalAlignment="Left" Margin="27,300,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_ToExcel_Click"/>
         <Button x:Name="Btn_FromExcel" Content="FromExcel" Grid.Column="3" HorizontalAlignment="Left" Margin="28,358,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="Btn_FromExcel_Click"/>
-        
+
         <TextBox x:Name="TxtBoxPrice" Grid.Column="3" HorizontalAlignment="Left" 
                  Height="28" Margin="328,34,-47,0" TextWrapping="Wrap" Text="1357" 
                  VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold"
@@ -73,10 +73,13 @@
                   />
         <Button x:Name="BtnTest" Content="Test Struct" Grid.Column="3" HorizontalAlignment="Left" 
                 Margin="28,428,0,0" VerticalAlignment="Top" Width="114" Height="40" Click="BtnTest_Click"/>
-        
+
         <Button x:Name="btn_SaveToXML" Content="Save to XML" Grid.Column="3" 
                 HorizontalAlignment="Left" Margin="28,590,0,0" VerticalAlignment="Top" Width="116" Height="40" Click="btn_SaveToXML_Click"/>
         <Button x:Name="btn_LoadXML" Content="Load XML" Grid.Column="3" 
                 HorizontalAlignment="Left" Margin="28,668,0,0" VerticalAlignment="Top" Width="115" Height="40" Click="btn_LoadXML_Click"/>
+        
+        <Button x:Name="btn_GetTime" Content="Get Time" Grid.Column="3" 
+                HorizontalAlignment="Left" Margin="27,509,0,0" VerticalAlignment="Top" Width="114" Height="40" Click="btn_GetTime_Click"/>
     </Grid>
 </Window>

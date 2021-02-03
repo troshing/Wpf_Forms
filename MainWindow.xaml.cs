@@ -471,5 +471,12 @@ namespace Wpf_Forms
                 }
             }
         }
+
+        private void btn_GetTime_Click(object sender, RoutedEventArgs e)
+        {
+            long unixSeconds = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+            MessageBox.Show("Time = " + unixSeconds.ToString());
+        }
     }
 }
